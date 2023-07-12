@@ -3,13 +3,15 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
-
+from datetime import datetime
+now = datetime.now()
 
 auth = Blueprint('auth', __name__)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    now = datetime.now()
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -25,7 +27,7 @@ def login():
         else:
             flash('Email does not exist.', category='error')
 
-    return render_template("login.html", user=current_user)
+    return render_template("login.html", user=current_user, now=now)
 
 
 @auth.route('/logout')
@@ -63,4 +65,4 @@ def sign_up():
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
 
-    return render_template("sign_up.html", user=current_user)
+    return render_template("sign_up.html", user=current_user, now=now)

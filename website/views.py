@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .models import Note
 from . import db
 import json
+from datetime import datetime
 
 views = Blueprint('views', __name__)
 
@@ -10,6 +11,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    now = datetime.now()
     if request.method == 'POST': 
         note = request.form.get('note')#Gets the note from the HTML 
 
@@ -21,7 +23,7 @@ def home():
             db.session.commit()
             flash('Note added!', category='success')
 
-    return render_template("home.html", user=current_user)
+    return render_template("home.html", user=current_user, now=now)
 
 
 @views.route('/delete-note', methods=['POST'])

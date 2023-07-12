@@ -39,7 +39,7 @@
         data-toggle="collapse"
         data-target="#navbar"
       >
-        <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
@@ -47,7 +47,7 @@
           <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
           {% else %}
           {% if request.path != '/login' %}
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
+          <a class="nav-item nav-link" id="login" href="/login" style="white-space: nowrap;">Login &nbsp;&nbsp;</a>
           <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
             <span class="text-center navbar-text" style="width: 100%; display: inline-block; text-align: center; color:white">
               @abhiraj
@@ -55,7 +55,7 @@
           </nav>
           {% endif %}
           {% if request.path != '/sign-up' %}
-            <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+            <a class="nav-item nav-link" id="signUp" href="/sign-up" style="white-space: nowrap;">Sign Up</a>
             <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
               <span class="text-center navbar-text" style="width: 100%; display: inline-block; text-align: center; color:white">
                 @abhiraj
@@ -64,7 +64,20 @@
           {% endif %}
           {% endif %}
         </div>
+        {% if user.is_authenticated %}
+        <div class="d-flex justify-content-center w-100">
+          <span class="navbar-text text-center" style="color: white; font-weight: bold;">
+             <span>Welcome</span>
+          </span>
+        </div>  
+        {% else %}
+        <div class="d-flex justify-content-center w-100">
+          <span class="navbar-text text-center" style="color: white; font-weight: bold;">
+             <span id="current-time"></span>
+          </span>
+        </div>
       </div>
+      {% endif %}
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
@@ -101,6 +114,31 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
+    <script>
+      function updateCurrentTime() {
+          var now = new Date();
+          var day = now.toLocaleDateString('en-US', { weekday: 'long' });
+          var hours = now.getHours();
+          var minutes = now.getMinutes();
+          var ampm = hours >= 12 ? 'PM' : 'AM';
+  
+          // Convert to 12-hour format
+          hours = hours % 12;
+          hours = hours ? hours : 12;
+  
+          // Add leading zeros if needed
+          hours = String(hours).padStart(2, '0');
+          minutes = String(minutes).padStart(2, '0');
+  
+          var timeString = day + ' ' + hours + ':' + minutes + ' ' + ampm;
+          var timeElement = document.getElementById("current-time");
+          timeElement.textContent = "" + timeString;
+      }
+  
+      // Update the time immediately and then refresh it every minute
+      updateCurrentTime();
+      setInterval(updateCurrentTime, 60000);
+  </script>
 
 {% block javascript %}
     <script type="text/javascript">
