@@ -1,0 +1,73 @@
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %}
+{% block content %}
+<style>
+  .card-header {
+    padding-top: 20px;
+    padding-bottom: 25px;
+  }
+  .card-body {
+    white-space: pre-wrap;
+  }
+  .card {
+    background-color: #333;
+    color: white;
+    border-radius: 0px;
+    width:75%;
+    margin: 0 auto;
+    border-color: #888;
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+  }
+  form {
+    margin-top: 10px;
+    background-color: #333;
+    padding: 0px;
+  }
+  textarea.form-control {
+    background-color: #333;
+    color: white;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 300px;
+    resize: none;
+    white-space: pre-wrap;
+
+  }
+</style>
+
+<form method="POST">
+  <div class="card text-white bg-dark mb-3">
+    <div class="card-header">
+      <div align="left">
+        <button type="submit" class="btn btn-secondary">Upload</button>
+      </div>
+    </div>
+    <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft"></textarea>
+  </div>
+</form>
+
+<ul class="list-group list-group-flush" id="notes">
+  {% for note in user.notes | reverse %}
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header text-center" id="heading{{ note.id }}">
+        <h2 class="mb-0">
+          <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{ note.id }}" aria-expanded="true" aria-controls="collapse{{ note.id }}">
+            Collapsible Group Item #{{ loop.revindex }}
+          </button>
+        </h2>
+      </div>
+  
+      <div id="collapse{{ note.id }}" class="collapse" aria-labelledby="heading{{ note.id }}" data-parent="#accordionExample">
+        <div class="card-body">{{note.data}}</div>
+      </div>
+    </div>
+  </div>{% endfor %}
+</ul>
+{% endblock %}
