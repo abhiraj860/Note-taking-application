@@ -20,9 +20,15 @@ def home():
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
             flash('Note added!', category='success')
+    
     # Access the user's first name
     first_name = current_user.first_name
-    return render_template("home.html", user=current_user, first_name = first_name)
+    
+    # Retrieve the day and date from the database
+    notes = Note.query.filter_by(user_id=current_user.id).all()
+    note_data = [(note.currDate, note.day) for note in notes]
+
+    return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data)
 
 
 @views.route('/delete-note', methods=['POST'])

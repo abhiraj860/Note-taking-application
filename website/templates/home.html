@@ -2,6 +2,17 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 <style>
+    .index-circle {
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      background-color: #353535;
+      color: #fff;
+      font-weight: bold;
+  }
   .card-header {
     padding-top: 20px;
     padding-bottom: 25px;
@@ -48,7 +59,7 @@
   <div class="card text-white bg-dark mb-3">
     <div class="card-header">
       <div align="left">
-        <button type="submit" class="btn btn-secondary" style="display: flex; justify-content: space-between;">Upload</button>
+        <button type="submit" class="btn btn-secondary" style="display: flex; justify-content: space-between;"><b>Upload</b></button>
       </div>
       <div style="font-weight: bold">
         <div class="d-flex justify-content-center w-100">
@@ -70,17 +81,24 @@
       <div class="card-header text-center" id="heading{{ note.id }}">
         <h2 class="mb-0">
           <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{ note.id }}" aria-expanded="true" aria-controls="collapse{{ note.id }}">
-            Collapsible Group Item #{{ loop.revindex }}
+            {% if note.currDate %}
+              {% set index = loop.length - loop.index0 %} 
+              <span class="index-circle">{{ index }}</span><b> {{ note.day }} - {{ note.currDate[8:] }}-{{ note.currDate[5:7] }}-{{ note.currDate[:4] }}</b>
+            {% else %}
+              <span class="index-circle">{{ index }}</span> <b>{{ note.day }} - Date Not Available </b>
+            {% endif %}
           </button>
         </h2>
       </div>
-  
+
       <div id="collapse{{ note.id }}" class="collapse" aria-labelledby="heading{{ note.id }}" data-parent="#accordionExample">
-        <div class="card-body">{{note.data}}</div>
+        <div class="card-body">{{ note.data }}</div>
       </div>
     </div>
   </div>{% endfor %}
 </ul>
+
+
 <script>
   function updateCurrentTime() {
       var now = new Date();
