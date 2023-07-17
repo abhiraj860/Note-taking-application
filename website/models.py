@@ -11,7 +11,7 @@ class Note(db.Model):
     currDate = db.Column(db.String(20), default=datetime.now().strftime('%Y-%m-%d'))
     time = db.Column(db.String(20), default=datetime.now().strftime('%H:%M:%S'))
     month = db.Column(db.String(20), default=datetime.now().strftime('%B'))
-    sentiment = db.Column(db.String(50))
+    sentiment = db.Column(db.Float)
     classification = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

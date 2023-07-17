@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .models import Note
 from . import db
 import json
+from website import ml_model
 
 views = Blueprint('views', __name__)
 
@@ -16,7 +17,9 @@ def home():
         if len(note) < 1:
             flash('Note is too short!', category='error') 
         else:
-            new_note = Note(data=note, user_id=current_user.id)  #providing the schema for the note 
+            # Compute sentiment using the nltk_vader_sentiment function
+            sentiment = ml_model.nltk_vader_sentiment(note)
+            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment)
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
             flash('Note added!', category='success')
