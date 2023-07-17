@@ -26,7 +26,7 @@ def home():
     
     # Retrieve the day and date from the database
     notes = Note.query.filter_by(user_id=current_user.id).all()
-    note_data = [(note.currDate, note.day) for note in notes]
+    note_data = [(note.currDate, note.day, note.month) for note in notes]
 
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data)
 
