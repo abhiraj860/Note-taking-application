@@ -31,4 +31,3 @@ const colors = [
   "#008000"
 ];
 
-console.log(colors);
