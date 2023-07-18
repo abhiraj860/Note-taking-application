@@ -5,7 +5,6 @@ from . import db
 import json
 from website import ml_model
 
-
 views = Blueprint('views', __name__)
 
 
@@ -19,8 +18,8 @@ def home():
             flash('Note is too short!', category='error') 
         else:
             # Compute sentiment using the nltk_vader_sentiment function
-            sentiment = ml_model.nltk_vader_sentiment(note)
-            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment)
+            sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
+            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor)
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
             flash('Note added!', category='success')
@@ -30,8 +29,7 @@ def home():
     
     # Retrieve the day and date from the database
     notes = Note.query.filter_by(user_id=current_user.id).all()
-    note_data = [(note.currDate, note.day, note.month, round(note.sentiment, 1) * 10 + 10) for note in notes]
-
+    note_data = [(note.currDate, note.day, note.month, note.sentiment) for note in notes]
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data)
 
 

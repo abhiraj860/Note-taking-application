@@ -73,7 +73,6 @@
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
 </form>
-
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes | reverse %}
   <div class="accordion" id="accordionExample">
@@ -83,7 +82,7 @@
           <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{ note.id }}" aria-expanded="true" aria-controls="collapse{{ note.id }}">
             {% if note.currDate %}
               {% set index = loop.length - loop.index0 %} 
-              <span class="index-circle">{{ index }}</span><b> {{ note.day }} : {{ note.currDate[8:] }}-{{ note.month }}-{{ note.currDate[:4] }}</b>
+              <span class="index-circle">{{ index }} {{ note.sentiment|round(1) }} - {{ (((note.sentiment)|round(1)) * 10 + 10) | int}}</span><b> {{ note.day }} : {{ note.currDate[8:] }}-{{ note.month }}-{{ note.currDate[:4] }}</b>
             {% else %}
               <span class="index-circle">{{ index }}</span> <b>{{ note.day }} - Date Not Available </b>
             {% endif %}
