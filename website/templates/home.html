@@ -53,6 +53,10 @@
     white-space: pre-wrap;
 
   }
+  ul#notes button {
+    border-width: 3px;
+  }
+
 </style>
 
 <form method="POST">
@@ -79,12 +83,12 @@
     <div class="card">
       <div class="card-header text-center" id="heading{{ note.id }}">
         <h2 class="mb-0">
-          <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{ note.id }}" aria-expanded="true" aria-controls="collapse{{ note.id }}">
+          <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{ note.id }}" aria-expanded="true" aria-controls="collapse{{ note.id }}"  {% if note.sentimentColor %}style="border-color: {{ note.sentimentColor }}"{% endif %}>
             {% if note.currDate %}
               {% set index = loop.length - loop.index0 %} 
-              <span class="index-circle">{{ index }} {{ note.sentiment|round(1) }} - {{ (((note.sentiment)|round(1)) * 10 + 10) | int}}</span><b> {{ note.day }} : {{ note.currDate[8:] }}-{{ note.month }}-{{ note.currDate[:4] }}</b>
+              <span class="index-circle">{{ index }}</span><b> {{ note.day }} : {{ note.currDate[8:] }}-{{ note.month }}-{{ note.currDate[:4] }}</b>
             {% else %}
-              <span class="index-circle">{{ index }}</span> <b>{{ note.day }} - Date Not Available </b>
+              <span class="index-circle">{{ index }}</span><b>{{ note.day }} - Date Not Available </b>
             {% endif %}
           </button>
         </h2>
