@@ -22,8 +22,20 @@ def home():
                 # Check if there is a note for the current date in the database
                 current_date = datetime.now().date()
                 current_time = datetime.now().time()
-                latest_note = Note.query.filter_by(user_id=current_user.id, currDate=current_date).order_by(Note.currtime.desc()).first()
-
+            
+                latest_note = Note.query.filter_by(user_id=current_user.id, currDate=current_date).order_by(Note.id.desc()).first()
+                if latest_note:
+                    latest_note.data = latest_note.data + '\n' + note
+                    latest_note.sentiment, latest_note.sentimentColor = ml_model.nltk_vader_sentiment(latest_note.data)
+                    latest_note.currtime = current_time  # Update the current time of the note
+                    latest_note.day = current_date.strftime("%A")  # Set the current day for the new note
+                    latest_note.month = current_date.strftime('%B')
+                    try:
+                        db.session.commit()
+                        flash('Note appended!', category='success')
+                    except Exception as e:
+                        flash(f'Error: {str(e)}', category='error')
+                return redirect(url_for('views.home'))  
             # Compute sentiment using the nltk_vader_sentiment function
             sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
             new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor)
