@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from .models import Note
 from . import db
@@ -23,7 +23,7 @@ def home():
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
             flash('Note added!', category='success')
-    
+            return redirect(url_for('views.home'))  # Redirect to the home page to avoid form resubmission    
     # Access the user's first name
     first_name = current_user.first_name
     
