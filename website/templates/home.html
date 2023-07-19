@@ -56,15 +56,21 @@
   ul#notes button {
     border-width: 3px;
   }
+  #note::placeholder {
+    color: #999; /* Replace #999 with the desired color for the placeholder */
+  }
+  .form-check {
+    padding-top: 7px;
+  }
 
 </style>
-
 <form method="POST">
   <div class="card text-white bg-dark mb-3">
     <div class="card-header">
       <div align="left">
         <button type="submit" class="btn btn-secondary" style="display: flex; justify-content: space-between;"><b>Upload</b></button>
       </div>
+      
       <div style="font-weight: bold">
         <div class="d-flex justify-content-center w-100">
           <span class="navbar-text text-center" style="color: white; font-weight: bold;">
@@ -72,7 +78,11 @@
           </span>
         </div>
       </div>
-        
+      <div class="form-check form-switch align-center">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="switchState">
+        <label class="form-check-label" for="flexSwitchCheckChecked">Single-Mode</label>
+        <!-- <input type="hidden" name="note" id="note" value=""> Add a hidden input field to store the note -->
+      </div>
     </div>
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
