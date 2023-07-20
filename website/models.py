@@ -14,6 +14,7 @@ class Note(db.Model):
     sentiment = db.Column(db.Float)
     sentimentColor = db.Column(db.String(255))
     classification = db.Column(db.String(50))
+    switch_state = db.Column(db.Boolean, default=False)  # New column for the switch state
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 

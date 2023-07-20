@@ -15,6 +15,8 @@ def home():
     if request.method == 'POST': 
         note = request.form.get('note')#Gets the note from the HTML 
         switch_state = request.form.get('switchState')  # Retrieve the switch state
+        switch_state_bool = bool(switch_state)
+
         if len(note) < 1:
             flash('Note is too short!', category='error') 
         else:
@@ -30,6 +32,7 @@ def home():
                     latest_note.currtime = current_time  # Update the current time of the note
                     latest_note.day = current_date.strftime("%A")  # Set the current day for the new note
                     latest_note.month = current_date.strftime('%B')
+                    latest_note.switch_state = switch_state_bool
                     try:
                         db.session.commit()
                         flash('Note appended!', category='success')
@@ -39,14 +42,15 @@ def home():
                 else:
                     # Compute sentiment using the nltk_vader_sentiment function
                     sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
-                    new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor)
+                    new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor, switch_state = switch_state_bool)
                     db.session.add(new_note) #adding the note to the database 
                     db.session.commit()
                     flash('Note added!', category='success')    
                     return redirect(url_for('views.home'))  # Redirect to the home page to avoid form resubmission     
             # Compute sentiment using the nltk_vader_sentiment function
             sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
-            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor)
+            # switch_state_bool = bool(switch_state)
+            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor, switch_state = switch_state_bool)
             db.session.add(new_note) #adding the note to the database 
             db.session.commit()
             flash('Note added!', category='success')    
@@ -56,8 +60,11 @@ def home():
     
     # Retrieve the day and date from the database
     notes = Note.query.filter_by(user_id=current_user.id).all()
+    get_switch_state = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
+    latest_switch_state = "checked" if get_switch_state.switch_state else "" 
+    
     note_data = [(note.currDate, note.day, note.month, note.sentimentColor) for note in notes]
-    return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data)
+    return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
 
 
 @views.route('/delete-note', methods=['POST'])
