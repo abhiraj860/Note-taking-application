@@ -35,7 +35,15 @@ def home():
                         flash('Note appended!', category='success')
                     except Exception as e:
                         flash(f'Error: {str(e)}', category='error')
-                return redirect(url_for('views.home'))  
+                    return redirect(url_for('views.home')) 
+                else:
+                    # Compute sentiment using the nltk_vader_sentiment function
+                    sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
+                    new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor)
+                    db.session.add(new_note) #adding the note to the database 
+                    db.session.commit()
+                    flash('Note added!', category='success')    
+                    return redirect(url_for('views.home'))  # Redirect to the home page to avoid form resubmission     
             # Compute sentiment using the nltk_vader_sentiment function
             sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
             new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor)
