@@ -48,13 +48,13 @@
     border: 3px solid #ccc;
     border-radius: 10px;
     box-sizing: border-box;
-    height: 300px;
+    height: 320px;
     resize: none;
     white-space: pre-wrap;
 
   }
   ul#notes button {
-    border-width: 3px;
+    border-width: 3.5px;
   }
   #note::placeholder {
     color: #999; /* Replace #999 with the desired color for the placeholder */
@@ -65,7 +65,7 @@
   input[type="date"] {
       font-size: 17px;
       padding: 10px;
-      margin-top: 5px;
+      margin-top: 4px;
       margin-right:5px;
       margin-bottom: 20px;
       border: 1px solid #ccc;
@@ -100,13 +100,13 @@
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
 </form>
-<form method="get">
+
+<form id="search-form" method="GET">
   <div align="center">
-    <input type="date" id="search" name="search">
-    <button type="submit" class="btn btn-primary btn-lg"><b>Search</b></button>
+    <input type="date" id="search" name="searchDate">
+    <button type="submit" class="btn btn-primary btn-lg" name="searchButton"><b>Search</b></button>
   </div>
 </form>
-
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes | reverse %}
   <div class="accordion" id="accordionExample">
@@ -130,6 +130,33 @@
     </div>
   </div>{% endfor %}
 </ul>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('#search-form').submit(function(event) {
+          event.preventDefault();
+          var searchDate = $('#search').val();
+          console.log(searchDate);
+          if (searchDate.trim().length === 0) {
+              alert('Please select a date.');
+          } else {
+              $.ajax({
+                  type: 'GET',
+                  url: '/search-results',
+                  data: { searchDate: searchDate },
+                  success: function(result) {
+                      $('#notes').html(result);
+                  },
+                  error: function() {
+                      alert('An error occurred during the search.');
+                  }
+              });
+          }
+      });
+  });
+</script>
+
 <script>
   function updateCurrentTime() {
       var now = new Date();
