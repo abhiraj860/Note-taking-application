@@ -44,7 +44,7 @@
     width: 100%;
     margin: 0;
     padding: 20px;
-    font-size: 16px;
+    font-size: 17px;
     border: 3px solid #ccc;
     border-radius: 10px;
     box-sizing: border-box;
@@ -62,13 +62,26 @@
   .form-check {
     padding-top: 7px;
   }
+  input[type="date"] {
+      font-size: 17px;
+      padding: 10px;
+      margin-top: 5px;
+      margin-right:5px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      width: 218px;
+      font-weight: bold;
+      background-color: #ebe2e2
+  }
 
 </style>
 <form method="POST">
   <div class="card text-white bg-dark mb-3">
     <div class="card-header">
       <div align="left">
-        <button type="submit" class="btn btn-secondary" style="display: flex; justify-content: space-between;"><b>Upload</b></button>
+        <button type="submit" class="btn btn-secondary  btn-success" style="display: flex; justify-content: space-between;"><b>Upload</b></button>
       </div>
       
       <div style="font-weight: bold">
@@ -80,13 +93,20 @@
       </div>
       <div class="form-check form-switch align-center">
         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="switchState" {{latest_switch_state}}>
-        <label class="form-check-label" for="flexSwitchCheckChecked">Single-Mode</label>
+        <label class="form-check-label" for="flexSwitchCheckChecked"><b>Append</b></label>
         <!-- <input type="hidden" name="note" id="note" value=""> Add a hidden input field to store the note -->
       </div>
     </div>
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
 </form>
+<form method="get">
+  <div align="center">
+    <input type="date" id="search" name="search">
+    <button type="submit" class="btn btn-primary btn-lg"><b>Search</b></button>
+  </div>
+</form>
+
 <ul class="list-group list-group-flush" id="notes">
   {% for note in user.notes | reverse %}
   <div class="accordion" id="accordionExample">
@@ -110,8 +130,6 @@
     </div>
   </div>{% endfor %}
 </ul>
-
-
 <script>
   function updateCurrentTime() {
       var now = new Date();
