@@ -132,31 +132,6 @@
 </ul>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- <script>
-  $(document).ready(function() {
-      $('#search-form').submit(function(event) {
-          event.preventDefault();
-          var searchDate = $('#search').val();
-          console.log(searchDate);
-          if (searchDate.trim().length === 0) {
-              alert('Please select a date.');
-          } else {
-              $.ajax({
-                  type: 'GET',
-                  url: '/search-results',
-                  data: { searchDate: searchDate },
-                  success: function(result) {
-                      $('#notes').html(result);
-                  },
-                  error: function() {
-                      alert('An error occurred during the search.');
-                  }
-              });
-          }
-      });
-  });
-</script> -->
-
 <script>
   function updateCurrentTime() {
       var now = new Date();
