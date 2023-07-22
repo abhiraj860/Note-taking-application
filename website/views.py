@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, flash, jsonify, redirect,
 from flask_login import login_required, current_user
 from .models import Note
 from . import db
-from flask import jsonify
 from website import ml_model
 from datetime import datetime
 
@@ -12,6 +11,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+
     if request.method == 'POST': 
         note = request.form.get('note')#Gets the note from the HTML 
         switch_state = request.form.get('switchState')  # Retrieve the switch state
@@ -61,14 +61,16 @@ def home():
     # Retrieve the day and date from the database
     notes = Note.query.filter_by(user_id=current_user.id).all()
     get_switch_state = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
+    ###########################################################################################################
+    searchDate = request.args.get('searchDate')
+    if 'searchButton' in request.args:
+        if not searchDate:
+            flash('Please provide a valid date.', category='error')
+        else:
+            flash('Search Complete for' + searchDate, category='success')
+            return redirect(url_for('views.home'))
     
-    # searchDate = request.args.get('searchDate')
-    # if 'searchButton' in request.args:
-    #     if not searchDate:
-    #         flash('Please provide a valid date.', category='error')
-    #     else:
-    #         flash('Search Complete', category='success')
-    #         return redirect(url_for('views.home'))
+    ##########################################################################################################
     latest_switch_state = "checked" if get_switch_state.switch_state else "" 
     
     note_data = [(note.currDate, note.day, note.month, note.sentimentColor) for note in notes]
