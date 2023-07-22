@@ -75,22 +75,22 @@ def home():
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
 
 
-@views.route('/search-results', methods=['GET', 'POST'])
-def search_results():
-    search_date = request.args.get('searchDate')
+# @views.route('/search-results', methods=['GET', 'POST'])
+# def search_results():
+#     search_date = request.args.get('searchDate')
 
-    # Validate the search_date (you can add more complex validation logic as needed)
-    if not search_date:
-        return jsonify(error='No search date provided.')
+#     # Validate the search_date (you can add more complex validation logic as needed)
+#     if not search_date:
+#         return jsonify(error='No search date provided.')
 
-    # Process the search_date data as needed
-    # For example, you can check if it's a valid date or perform some other operations.
-    try:
-        # In this example, we create a simple search result HTML snippet.
-        search_result_html = f'Search results for: {search_date}'
-        return search_result_html
-    except Exception as e:
-        return jsonify(error=f'Error processing search: {str(e)}')
+#     # Process the search_date data as needed
+#     # For example, you can check if it's a valid date or perform some other operations.
+#     try:
+#         # In this example, we create a simple search result HTML snippet.
+#         search_result_html = f'Search results for: {search_date}'
+#         return search_result_html
+#     except Exception as e:
+#         return jsonify(error=f'Error processing search: {str(e)}')
 
 
 
