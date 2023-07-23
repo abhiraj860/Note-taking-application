@@ -64,9 +64,10 @@
   }
   input[type="date"] {
       font-size: 17px;
-      padding: 10px;
-      margin-top: 4px;
+      padding: 5px;
+      margin-top: 7px;
       margin-right:5px;
+      margin-left: 5px;
       margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -75,7 +76,13 @@
       font-weight: bold;
       background-color: #ebe2e2
   }
-
+  #showall {
+    margin-left: 15px;
+    margin-top: -5px;
+  }
+  #searchButton {
+    margin-top: -5px;
+  }
 </style>
 <form method="POST">
   <div class="card text-white bg-dark mb-3">
@@ -104,9 +111,11 @@
 <form id="search-form" method="GET">
   <div align="center">
     <input type="date" id="search" name="searchDate">
-    <button type="submit" class="btn btn-primary btn-lg" name="searchButton"><b>Search</b></button>
+    <button id="searchButton" type="submit" class="btn btn-primary" name="searchButton"><b>Search</b></button>
+    <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button>
   </div>
 </form>
+
 <ul class="list-group list-group-flush" id="notes">
   {% for note_item in note_data | reverse %}
   <div class="accordion" id="accordionExample">

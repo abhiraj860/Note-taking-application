@@ -68,45 +68,13 @@ def home():
         notesSearch = Note.query.filter_by(user_id=current_user.id).filter(Note.currDate == searchDate).all()
         if not notesSearch:
             flash('Data Not Found', category='error')
+            note_data = []
+            return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
         else:
             note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
-            flash('Search Complete for' + searchDate, category='success')
             return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
     
     ##########################################################################################################
     
-    note_data = [(note.currDate, note.day, note.month, note.sentimentColor) for note in notes]
+    note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notes]
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
-
-
-# @views.route('/search-results', methods=['GET', 'POST'])
-# def search_results():
-#     search_date = request.args.get('searchDate')
-
-#     # Validate the search_date (you can add more complex validation logic as needed)
-#     if not search_date:
-#         return jsonify(error='No search date provided.')
-
-#     # Process the search_date data as needed
-#     # For example, you can check if it's a valid date or perform some other operations.
-#     try:
-#         # In this example, we create a simple search result HTML snippet.
-#         search_result_html = f'Search results for: {search_date}'
-#         return search_result_html
-#     except Exception as e:
-#         return jsonify(error=f'Error processing search: {str(e)}')
-
-
-
-
-# @views.route('/delete-note', methods=['POST'])
-# def delete_note():  
-#     note = json.loads(request.data) # this function expects a JSON from the INDEX.js file 
-#     noteId = note['noteId']
-#     note = Note.query.get(noteId)
-#     if note:
-#         if note.user_id == current_user.id:
-#             db.session.delete(note)
-#             db.session.commit()
-
-#     return jsonify({})
