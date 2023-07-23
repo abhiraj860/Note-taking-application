@@ -32,6 +32,9 @@
       width: 200px; /* Adjust the width as needed */
       font-size: 14px; /* Adjust the font size as needed */
     }
+    #deleteButton {
+      margin-right: 10px;
+    }
   </style>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" #e3f2fd;>
@@ -71,7 +74,9 @@
           <span class="navbar-text text-center" style="color: white; font-weight: bold;">
              <span>Welcome {{first_name}} !</span>
           </span>
-        </div>  
+        </div>
+        <button id = "deleteButton" type="button" class="btn btn-outline-danger"> Delete</button>
+  
         {% else %}
         <div class="d-flex justify-content-center w-100">
           <span class="navbar-text text-center" style="color: white; font-weight: bold;">
