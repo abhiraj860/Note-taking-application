@@ -61,17 +61,19 @@ def home():
     # Retrieve the day and date from the database
     notes = Note.query.filter_by(user_id=current_user.id).all()
     get_switch_state = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
+    latest_switch_state = "checked" if get_switch_state.switch_state else "" 
     ###########################################################################################################
     searchDate = request.args.get('searchDate')
     if 'searchButton' in request.args:
-        if not searchDate:
-            flash('Please provide a valid date.', category='error')
+        notesSearch = Note.query.filter_by(user_id=current_user.id).filter(Note.currDate == searchDate).all()
+        if not notesSearch:
+            flash('Data Not Found', category='error')
         else:
+            note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
             flash('Search Complete for' + searchDate, category='success')
-            return redirect(url_for('views.home'))
+            return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
     
     ##########################################################################################################
-    latest_switch_state = "checked" if get_switch_state.switch_state else "" 
     
     note_data = [(note.currDate, note.day, note.month, note.sentimentColor) for note in notes]
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)

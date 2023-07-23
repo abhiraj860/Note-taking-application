@@ -108,24 +108,24 @@
   </div>
 </form>
 <ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes | reverse %}
+  {% for note_item in note_data | reverse %}
   <div class="accordion" id="accordionExample">
     <div class="card">
-      <div class="card-header text-center" id="heading{{ note.id }}">
+      <div class="card-header text-center" id="heading{{ note_item[5] }}">
         <h2 class="mb-0">
-          <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{ note.id }}" aria-expanded="true" aria-controls="collapse{{ note.id }}"  {% if note.sentimentColor %}style="border-color: {{ note.sentimentColor }}"{% endif %}>
-            {% if note.currDate %}
+          <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{note_item[5]}}" aria-expanded="true" aria-controls="collapse{{ note_item[5] }}"  {% if note_item[3] %}style="border-color: {{ note_item[3] }}"{% endif %}>
+            {% if note_item[0] %}
               {% set index = loop.length - loop.index0 %} 
-              <span class="index-circle">{{ index }}</span><b> {{ note.day }} : {{ note.currDate[8:] }}-{{ note.month }}-{{ note.currDate[:4] }}</b>
+              <span class="index-circle">{{ index }}</span><b> {{ note_item[1] }} : {{ note_item[0][8:] }}-{{ note_item[2] }}-{{ note_item[0][:4] }}</b>
             {% else %}
-              <span class="index-circle">{{ index }}</span><b>{{ note.day }} - Date Not Available </b>
+              <span class="index-circle">{{ index }}</span><b>{{ note_item[1] }} - Date Not Available </b>
             {% endif %}
           </button>
         </h2>
       </div>
 
-      <div id="collapse{{ note.id }}" class="collapse" aria-labelledby="heading{{ note.id }}" data-parent="#accordionExample">
-        <div class="card-body">{{ note.data }}</div>
+      <div id="collapse{{ note_item[5] }}" class="collapse" aria-labelledby="heading{{ note_item[5] }}" data-parent="#accordionExample">
+        <div class="card-body">{{ note_item[4] }}</div>
       </div>
     </div>
   </div>{% endfor %}
