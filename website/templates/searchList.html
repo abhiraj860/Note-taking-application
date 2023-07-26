@@ -1,3 +1,14 @@
+<style>
+  #showall{
+    margin-top:-20px;
+    margin-bottom:15px;
+  }
+</style>
+<form id="search-form" method="POST" >
+  <div align="center">
+    <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button>
+  </div>
+</form>
 {% for note_item in note_data | reverse %}
   <div class="accordion" id="accordionExample">
     <div class="card">
