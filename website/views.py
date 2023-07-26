@@ -75,3 +75,4 @@ def searchList():
         else:
             note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
             return render_template("searchList.html", note_data=note_data)
+    return redirect(url_for('views.home'))

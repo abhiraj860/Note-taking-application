@@ -107,14 +107,13 @@
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
 </form>
-<!-- action="/searchList" -->
 <form id="search-form" method="POST" >
   <div align="center">
     <input type="date" id="search" name="searchDate">
     <button id="searchButton" type="submit" class="btn btn-primary" name="searchButton"><b>Search</b></button>
-    <!-- <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button> -->
   </div>
 </form>
+<!-- <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button> -->
 
 <ul class="list-group list-group-flush" id="notes">
   {% for note_item in note_data | reverse %}
