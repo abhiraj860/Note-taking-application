@@ -172,7 +172,13 @@
   
   mainform.onsubmit = function(event) {
     event.preventDefault();
-    
+    const searchDateInput = document.getElementById("search");
+    const searchDateValue = searchDateInput.value.trim();
+
+    if (searchDateValue === "") {
+      alert("Please enter a search date.");
+      return; // Abort the form submission if the search date is empty
+    }
     const formData = new FormData(mainform); // Collect form data
     fetch("/searchList", {
       method: "POST",
