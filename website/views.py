@@ -11,8 +11,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-
-    if request.method == 'POST': 
+    if request.method == 'POST' and 'uploadButton' in request.form: 
         note = request.form.get('note')#Gets the note from the HTML 
         switch_state = request.form.get('switchState')  # Retrieve the switch state
         switch_state_bool = bool(switch_state)
@@ -62,19 +61,17 @@ def home():
     notes = Note.query.filter_by(user_id=current_user.id).all()
     get_switch_state = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
     latest_switch_state = "checked" if get_switch_state.switch_state else "" 
-    ###########################################################################################################
-    searchDate = request.args.get('searchDate')
-    if 'searchButton' in request.args:
-        notesSearch = Note.query.filter_by(user_id=current_user.id).filter(Note.currDate == searchDate).all()
-        if not notesSearch:
-            flash('Data Not Found', category='error')
-            note_data = []
-            return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
-        else:
-            note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
-            return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
-    
-    ##########################################################################################################
-    
     note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notes]
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
+
+@views.route('/searchList', methods=['POST'])
+@login_required
+def searchList():
+    if request.method == 'POST': 
+        searchDate = request.form.get('searchDate')
+        notesSearch = Note.query.filter_by(user_id=current_user.id).filter(Note.currDate == searchDate).all()
+        if not notesSearch:
+            return render_template("dataNotFound.html", searchDate = searchDate)
+        else:
+            note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
+            return render_template("searchList.html", note_data=note_data)

@@ -88,7 +88,7 @@
   <div class="card text-white bg-dark mb-3">
     <div class="card-header">
       <div align="left">
-        <button type="submit" class="btn btn-secondary  btn-success" style="display: flex; justify-content: space-between;"><b>Upload</b></button>
+        <button name="uploadButton" type="submit" class="btn btn-secondary  btn-success" style="display: flex; justify-content: space-between;"><b>Upload</b></button>
       </div>
       
       <div style="font-weight: bold">
@@ -107,12 +107,12 @@
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
 </form>
-
-<form id="search-form" method="GET">
+<!-- action="/searchList" -->
+<form id="search-form" method="POST" >
   <div align="center">
     <input type="date" id="search" name="searchDate">
     <button id="searchButton" type="submit" class="btn btn-primary" name="searchButton"><b>Search</b></button>
-    <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button>
+    <!-- <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button> -->
   </div>
 </form>
 
@@ -165,5 +165,24 @@
   // Update the time immediately and then refresh it every minute
   updateCurrentTime();
   setInterval(updateCurrentTime, 60000);
+</script>
+<script type="text/javascript">
+  const mainform = document.getElementById("search-form");
+  const mainList = document.getElementById("notes");
+  
+  mainform.onsubmit = function(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(mainform); // Collect form data
+    fetch("/searchList", {
+      method: "POST",
+      body: formData // Include form data in the request
+    }).then(response => {
+      return response.text();
+    }).then(html => {
+      console.log("1");
+      mainList.innerHTML = html;
+    });
+  }
 </script>
 {% endblock %}

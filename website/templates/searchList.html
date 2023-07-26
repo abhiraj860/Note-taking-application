@@ -1,0 +1,22 @@
+{% for note_item in note_data | reverse %}
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header text-center" id="heading{{ note_item[5] }}">
+        <h2 class="mb-0">
+          <button class="btn btn-secondary text-left" type="button" data-toggle="collapse" data-target="#collapse{{note_item[5]}}" aria-expanded="true" aria-controls="collapse{{ note_item[5] }}"  {% if note_item[3] %}style="border-color: {{ note_item[3] }}"{% endif %}>
+            {% if note_item[0] %}
+              {% set index = loop.length - loop.index0 %} 
+              <span class="index-circle">{{ index }}</span><b> {{ note_item[1] }} : {{ note_item[0][8:] }}-{{ note_item[2] }}-{{ note_item[0][:4] }}</b>
+            {% else %}
+              <span class="index-circle">{{ index }}</span><b>{{ note_item[1] }} - Date Not Available </b>
+            {% endif %}
+          </button>
+        </h2>
+      </div>
+
+      <div id="collapse{{ note_item[5] }}" class="collapse" aria-labelledby="heading{{ note_item[5] }}" data-parent="#accordionExample">
+        <div class="card-body">{{ note_item[4] }}</div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
