@@ -223,5 +223,35 @@
     });
   }
 </script>
+<script type="text/javascript">
+  const switchElement = document.getElementById('flexSwitchCheckChecked');
+
+  // Add an event listener to the switch element to detect changes
+  switchElement.addEventListener('change', function() {
+    const switchState = switchElement.checked; // Get the current state of the switch (true for checked, false for unchecked)
+
+    // Create an object to hold the switch state data
+    const data = {
+      switchState: switchState
+    };
+
+    // Make a POST request to the Flask server using Fetch API
+    fetch('/toggleSwitch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      // Handle the response from the server if needed
+      console.log('Switch state sent to the server successfully.');
+    })
+    .catch(error => {
+      // Handle any errors that occurred during the request
+      console.error('Error sending switch state:', error);
+    });
+  });
+</script>
 
 {% endblock %}

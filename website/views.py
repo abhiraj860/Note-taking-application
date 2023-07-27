@@ -4,6 +4,7 @@ from .models import Note
 from . import db
 from website import ml_model
 from datetime import datetime
+from flask import jsonify
 
 views = Blueprint('views', __name__)
 
@@ -85,5 +86,23 @@ def searchAll():
         note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notes]
         return render_template("searchList.html", note_data=note_data)
     return redirect(url_for('views.home'))
+
+
+@views.route('/toggleSwitch', methods=['POST'])
+@login_required
+def handle_switch_state():
+    # Get the switch state data from the request JSON
+    switch_state = request.json.get('switchState')
+
+    # Here you can process the switch state as needed
+    # For this example, we'll simply print the state
+    switch_state_bool = bool(switch_state)
+    print('Switch state received:', switch_state_bool)
+    latest_note = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
+    latest_note.switch_state = switch_state_bool
+    db.session.commit()
+
+    # You can also send a response back to the frontend if required
+    return jsonify({'message': 'Switch state received successfully.'})
 
     
