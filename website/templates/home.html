@@ -131,6 +131,7 @@
     </div>
   </form>
 </div>
+<button type="button" class="btn btn-outline-danger">Warning</button>
 
 <ul class="list-group list-group-flush" id="notes">
   {% for note_item in note_data | reverse %}
@@ -252,6 +253,37 @@
       console.error('Error sending switch state:', error);
     });
   });
+</script>
+<script type="text/javascript">
+  const noteTextArea = document.getElementById('note');
+  const logoutLink = document.getElementById('logout');
+
+  let isNoteModified = false; // A flag to track if the text area content has been modified
+
+  // Event listener for the text area to set the isNoteModified flag
+  noteTextArea.addEventListener('input', function() {
+    isNoteModified = true;
+  });
+
+  // Event listener for the logout button
+  logoutLink.addEventListener('click', function(event) {
+    // Check if the text area content has been modified
+    if (isNoteModified) {
+      // Show a confirmation dialog to inform the user about unsaved changes
+      const confirmLogout = confirm("You have unsaved changes. Are you sure you want to log out?");
+
+      // If the user confirms the logout, proceed with the logout action
+      if (!confirmLogout) {
+        event.preventDefault(); // Prevent the link action and stay on the same page
+      } else {
+        window.location.href = '/login';
+      }
+    } else {
+      window.location.href = '/login';
+    }
+  });
+</script>
+
 </script>
 
 {% endblock %}
