@@ -76,3 +76,14 @@ def searchList():
             note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
             return render_template("searchList.html", note_data=note_data)
     return redirect(url_for('views.home'))
+
+@views.route('/searchAll', methods=['POST'])
+@login_required
+def searchAll():
+    if request.method == 'POST': 
+        notes = Note.query.filter_by(user_id=current_user.id).all()
+        note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notes]
+        return render_template("searchList.html", note_data=note_data)
+    return redirect(url_for('views.home'))
+
+    

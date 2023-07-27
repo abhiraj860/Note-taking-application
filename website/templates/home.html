@@ -76,13 +76,24 @@
       font-weight: bold;
       background-color: #ebe2e2
   }
-  #showall {
-    margin-left: 15px;
-    margin-top: -5px;
+  
+  #search-form,
+  #showAllList {
+    margin-top:5px;
+    display: inline-block;
+    margin-left: 12px;
   }
-  #searchButton {
-    margin-top: -5px;
+  #searchButtons{
+    margin-left: 32%;
   }
+  #searchButton{
+    margin-top: -5px;
+    margin-left: -2px;
+  }
+  #showall{
+    margin-top:-5px;
+  }
+ 
 </style>
 <form method="POST">
   <div class="card text-white bg-dark mb-3">
@@ -107,12 +118,19 @@
     <textarea name="note" id="note" class="form-control bg-dark text-white" style="border: none;" autofocus wrap="soft" placeholder="Start writing here..."></textarea>
   </div>
 </form>
-<form id="search-form" method="POST" >
-  <div align="center">
-    <input type="date" id="search" name="searchDate">
-    <button id="searchButton" type="submit" class="btn btn-primary" name="searchButton"><b>Search</b></button>
-  </div>
-</form>
+<div id="searchButtons">
+  <form id="search-form" method="POST" >
+    <div align="center">
+      <input type="date" id="search" name="searchDate">
+      <button id="searchButton" type="submit" class="btn btn-primary" name="searchButton"><b>Search</b></button>
+    </div>
+  </form>
+  <form id="showAllList" method="POST" >
+    <div align="center">
+      <button id="showall" type="submit" class="btn btn-primary" name="showAllButton"><b>Show All</b></button>
+    </div>
+  </form>
+</div>
 
 <ul class="list-group list-group-flush" id="notes">
   {% for note_item in note_data | reverse %}
@@ -184,9 +202,26 @@
     }).then(response => {
       return response.text();
     }).then(html => {
-      console.log("1");
       mainList.innerHTML = html;
     });
   }
+  
+  const mainformAll = document.getElementById("showAllList");
+  const mainListAll = document.getElementById("notes");
+  
+  mainformAll.onsubmit = function(event) {
+    event.preventDefault();
+    const formDataAll = new FormData(mainformAll); // Collect form data
+    fetch("/searchAll", {
+      method: "POST",
+      body: formDataAll // Include form data in the request
+    }).then(response => {
+      return response.text();
+    }).then(html => {
+      console.log("Hello Hi!");
+      mainListAll.innerHTML = html;
+    });
+  }
 </script>
+
 {% endblock %}
