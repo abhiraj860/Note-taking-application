@@ -93,23 +93,6 @@
   #showall{
     margin-top:-5px;
   }
-  .dropdown-menu,.px-4,.py-3{
-    background-color: #212529;
-    color: white;
-  }
-  .dropdown-menu{
-    border-color: #888;
-    border-style: solid;
-    border-radius: 10px;
-    border-width: 3px 3px 3px 3px;
-  }
-  .delButton {
-    margin-top: 50px;
-    margin-left: 36%;
-  }
-  #deleteDrop {
-    width: 322px;
-  }
 </style>
 <form method="POST">
   <div class="card text-white bg-dark mb-3">
@@ -171,28 +154,7 @@
     </div>
   </div>{% endfor %}
 </ul>
-<div class="delButton">
-  <button id="deleteDrop" type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <b>DELETE ACCOUNT</b>
-  </button>
-  <div class="dropdown-menu">
-    <form class="px-4 py-3">
-      <div class="form-group">
-        <label style="color:red;"><b>Warning!!! this action is Irreversible</b></label>
-        <br>
-        <label style="color:red;"><b>Email Address</b></label>
-        <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="Enter email">
-      </div>
-      <div class="form-group">
-        <label style="color:red;"><b>Password</b></label>
-        <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Enter password">
-      </div>
-      <label style="color:red;"><b>Press below to delete your account</b></label>
-      <br>
-      <button type="submit" class="btn btn-danger btn-block"><b>DELETE MY ACCOUNT</b></button>
-    </form>
-  </div>
-</div>  
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   function updateCurrentTime() {
@@ -319,7 +281,4 @@
     }
   });
 </script>
-
-</script>
-
 {% endblock %}

@@ -5,7 +5,10 @@ from . import db
 from website import ml_model
 from datetime import datetime
 from flask import jsonify
-
+from werkzeug.security import check_password_hash
+from flask_login import login_user
+from .models import User
+from flask import session
 views = Blueprint('views', __name__)
 
 
@@ -105,4 +108,27 @@ def handle_switch_state():
     # You can also send a response back to the frontend if required
     return jsonify({'message': 'Switch state received successfully.'})
 
-    
+
+@views.route("/deleteAccount", methods=['POST'])
+@login_required
+def delete_account():
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    current_user_email = current_user.email
+    print(current_user_email)
+    if current_user_email is not None:
+        if current_user_email == email:
+            user = User.query.filter_by(email=email).first()
+            if user and check_password_hash(user.password, password):
+                db.session.delete(user)  # Assuming 'db' is your SQLAlchemy database object
+                db.session.commit()
+                session.clear()
+                return redirect(url_for('auth.logout'))
+            else:
+                return jsonify({"message": "Invalid email or password."}), 403  # Return a 403 Forbidden status for incorrect email/password
+        else:
+            return jsonify({"message": "Unauthorized access."}), 401  # Return a 401 Unauthorized status for unauthorized access
+    else:
+        return redirect(url_for('views.home'))
+        # return jsonify({"message": "Unauthorized access."}), 401  # Return a 401 Unauthorized status for unauthorized access

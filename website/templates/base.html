@@ -32,6 +32,10 @@
       width: 200px; /* Adjust the width as needed */
       font-size: 14px; /* Adjust the font size as needed */
     }
+    #delButton {
+      width: 200px;
+      margin-right: 1%;
+    }
   </style>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" #e3f2fd;>
@@ -72,6 +76,7 @@
              <span>Welcome {{first_name}} !</span>
           </span>
         </div>
+        <button type="button" id="delButton"  class="btn btn-outline-danger">Delete Account</button>
         {% else %}
         <div class="d-flex justify-content-center w-100">
           <span class="navbar-text text-center" style="color: white; font-weight: bold;">
@@ -138,5 +143,49 @@
       updateCurrentTime();
       setInterval(updateCurrentTime, 60000);
   </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    // Function to display the warning alert and prompt for email and password
+    function showWarningAndPrompt() {
+      if (confirm("Are you sure you want to delete your account?")) {
+        const email = prompt("Please enter your email:");
+        if (email !== null && email !== "") {
+          const password = prompt("Please enter your password:");
+          if (password !== null && password !== "") {
+            // Send the email and password to the backend via AJAX
+            $.ajax({
+              url: "/deleteAccount", // Replace with your backend URL
+              type: "POST",
+              data: { email: email, password: password },
+              success: function(response) {
+                // Handle the response from the backend if needed
+                window.location.href = '/logout';
+              },
+              error: function(error) {
+                // Handle errors if the AJAX request fails  
+                alert("Error: " + error.statusText);
+              }
+            });
+          } else {
+            alert("Password cannot be empty.");
+          }
+        } else {
+          alert("Email cannot be empty.");
+        }
+      }
+    }
+
+    // Function to handle button click
+    $('#delButton').on('click', function() {
+      showWarningAndPrompt();
+    });
+  });
+</script>
+
+  
   </body>
 </html>
