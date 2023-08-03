@@ -121,7 +121,7 @@ def delete_account():
         if current_user_email == email:
             user = User.query.filter_by(email=email).first()
             if user and check_password_hash(user.password, password):
-                db.session.delete(user)  # Assuming 'db' is your SQLAlchemy database object
+                db.session.delete(user)  
                 db.session.commit()
                 session.clear()
                 return redirect(url_for('auth.logout'))
@@ -131,4 +131,4 @@ def delete_account():
             return jsonify({"message": "Unauthorized access."}), 401  # Return a 401 Unauthorized status for unauthorized access
     else:
         return redirect(url_for('views.home'))
-        # return jsonify({"message": "Unauthorized access."}), 401  # Return a 401 Unauthorized status for unauthorized access
+        
