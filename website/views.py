@@ -15,6 +15,7 @@ views = Blueprint('views', __name__)
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    switch_state_bool = 0
     if request.method == 'POST' and 'uploadButton' in request.form: 
         note = request.form.get('note')#Gets the note from the HTML 
         switch_state = request.form.get('switchState')  # Retrieve the switch state
@@ -64,7 +65,10 @@ def home():
     # Retrieve the day and date from the database
     notes = Note.query.filter_by(user_id=current_user.id).all()
     get_switch_state = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
-    latest_switch_state = "checked" if get_switch_state.switch_state else "" 
+    if get_switch_state is None:
+        latest_switch_state = ""
+    else:
+        latest_switch_state = "checked" if get_switch_state.switch_state else "" 
     note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notes]
     return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
 
