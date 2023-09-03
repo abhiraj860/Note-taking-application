@@ -1,5 +1,4 @@
-![First Images](Images/1.png)
-# You can login as a user.
+<p># You can login as a user.
 # You can create a account as a user which means you can sign up.
 # Can log out as a user.
 # The current date and time is displayed on the navbar.
@@ -18,3 +17,4 @@
 # All the data is saved using sqlite in the database.
 # Apart from this the user can search for his daily journal or notes directly from the database using the search button. When the user clicks the button search button along with date of input, the search in the database is made and all the notes on the approprite date is shown. 
 # There is a delete button which helps the user to delete his account. Password and the user email is verified before the deletion process is proceeded.
+</p>
