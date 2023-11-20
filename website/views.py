@@ -1,25 +1,24 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login import login_required, current_user
-from .models import Note
-from . import db
-from website import ml_model
-from datetime import datetime
-from flask import jsonify
+# Import the required files
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
+from flask_login import login_required, current_user, login_user
 from werkzeug.security import check_password_hash
-from flask_login import login_user
-from .models import User
-from flask import session
+from .models import Note, User  # Import Note and User models from the same module
+from . import db
+from website import ml_model  # Assuming 'website' is a package with ml_model module
+from datetime import datetime
+
+# Create a Blueprint named 'views'
 views = Blueprint('views', __name__)
 
-
+# Login route
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-    switch_state_bool = 0
+    switch_state_bool = 0  # Initialize switch state as False
     if request.method == 'POST' and 'uploadButton' in request.form: 
-        note = request.form.get('note')#Gets the note from the HTML 
+        note = request.form.get('note')  # Get the note from the HTML form
         switch_state = request.form.get('switchState')  # Retrieve the switch state
-        switch_state_bool = bool(switch_state)
+        switch_state_bool = bool(switch_state)  # Convert switch state to boolean
         
         if len(note) < 1:
             flash('Note is too short!', category='error') 
@@ -46,16 +45,15 @@ def home():
                 else:
                     # Compute sentiment using the nltk_vader_sentiment function
                     sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
-                    new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor, switch_state = switch_state_bool)
-                    db.session.add(new_note) #adding the note to the database 
+                    new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor=sentimentColor, switch_state=switch_state_bool)
+                    db.session.add(new_note)  # Add the note to the database 
                     db.session.commit()
                     flash('Note added!', category='success')    
                     return redirect(url_for('views.home'))  # Redirect to the home page to avoid form resubmission     
             # Compute sentiment using the nltk_vader_sentiment function
             sentiment, sentimentColor = ml_model.nltk_vader_sentiment(note)
-            # switch_state_bool = bool(switch_state)
-            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor = sentimentColor, switch_state = switch_state_bool)
-            db.session.add(new_note) #adding the note to the database 
+            new_note = Note(data=note, user_id=current_user.id, sentiment=sentiment, sentimentColor=sentimentColor, switch_state=switch_state_bool)
+            db.session.add(new_note)  # Add the note to the database 
             db.session.commit()
             flash('Note added!', category='success')    
         return redirect(url_for('views.home'))  # Redirect to the home page to avoid form resubmission    
@@ -70,8 +68,9 @@ def home():
     else:
         latest_switch_state = "checked" if get_switch_state.switch_state else "" 
     note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notes]
-    return render_template("home.html", user=current_user, first_name = first_name, note_data=note_data, latest_switch_state = latest_switch_state)
+    return render_template("home.html", user=current_user, first_name=first_name, note_data=note_data, latest_switch_state=latest_switch_state)
 
+# Route to handle searching for notes on a specific date
 @views.route('/searchList', methods=['POST'])
 @login_required
 def searchList():
@@ -79,12 +78,13 @@ def searchList():
         searchDate = request.form.get('searchDate')
         notesSearch = Note.query.filter_by(user_id=current_user.id).filter(Note.currDate == searchDate).all()
         if not notesSearch:
-            return render_template("dataNotFound.html", searchDate = searchDate)
+            return render_template("dataNotFound.html", searchDate=searchDate)
         else:
             note_data = [(note.currDate, note.day, note.month, note.sentimentColor, note.data, note.id) for note in notesSearch]
             return render_template("searchList.html", note_data=note_data)
     return redirect(url_for('views.home'))
 
+# Route to handle searching for all notes
 @views.route('/searchAll', methods=['POST'])
 @login_required
 def searchAll():
@@ -94,25 +94,24 @@ def searchAll():
         return render_template("searchList.html", note_data=note_data)
     return redirect(url_for('views.home'))
 
-
+# Route to handle toggling the switch state
 @views.route('/toggleSwitch', methods=['POST'])
 @login_required
 def handle_switch_state():
     # Get the switch state data from the request JSON
     switch_state = request.json.get('switchState')
 
-    # Here you can process the switch state as needed
-    # For this example, we'll simply print the state
+    # Process the switch state
     switch_state_bool = bool(switch_state)
     print('Switch state received:', switch_state_bool)
     latest_note = Note.query.filter_by(user_id=current_user.id).order_by(Note.id.desc()).first()
     latest_note.switch_state = switch_state_bool
     db.session.commit()
 
-    # You can also send a response back to the frontend if required
+    # Send a response back to the frontend
     return jsonify({'message': 'Switch state received successfully.'})
 
-
+# Route to handle deleting the user account
 @views.route("/deleteAccount", methods=['POST'])
 @login_required
 def delete_account():
@@ -135,4 +134,3 @@ def delete_account():
             return jsonify({"message": "Unauthorized access."}), 401  # Return a 401 Unauthorized status for unauthorized access
     else:
         return redirect(url_for('views.home'))
-        
